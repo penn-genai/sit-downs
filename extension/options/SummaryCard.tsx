@@ -32,7 +32,7 @@ const SummaryCard = ({
             key={index}
             href={link[1]}
             className="text-blue-500 hover:text-blue-600 mr-2">
-            {link[0]}
+            {link[0].split(".")[0]}
           </a>
         ))}
       </div>

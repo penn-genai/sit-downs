@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from utils.atlas import DatasetPage
 from services.date import create_today_by_user, get_today_by_user, update_date_summary
 
-from services.page import create_page, get_pages_by_date_id, get_pages_today_by_user
+from services.page import create_page, get_pages_by_date_id, get_pages_today_by_user, increment_page_times_visited
 from utils.llm import summarize_date, summarize_webpage, summarize_summary
 from utils.atlas import add_page, generate_map
 from services.profile import get_profile_by_id
@@ -33,6 +33,10 @@ class ProcessPageRequest(BaseModel):
 
 @page_router.post("/{uid}")
 async def process_page_handler(request: Request, uid: str, input: ProcessPageRequest):
+    result = increment_page_times_visited(request.app.supabase, uid, input.url)
+    if result:
+        return result
+
     page_summary = summarize_webpage(request.app.llm, input.title, input.url, input.body)
 
     today = get_today_by_user(request.app.supabase, uid)

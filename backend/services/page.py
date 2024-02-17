@@ -1,7 +1,8 @@
+from typing import Optional
 from pydantic import BaseModel
 from supabase import Client
 
-from services.date import today
+from services.date import get_today_by_user, today
 
 
 class Page(BaseModel):
@@ -12,12 +13,13 @@ class Page(BaseModel):
     body: str
     summary: str
     date_id: int
+    times_visited: Optional[int]
 
 
 def create_page(supabase: Client, title, url, body, summary, date_id):
     response = (
         supabase.table("pages")
-            .insert({"title": title, "url": url, "body": body, "summary": summary, "date_id": date_id})
+            .insert({"title": title, "url": url, "body": body, "summary": summary, "date_id": date_id, "times_visited": 1})
             .execute()
     )
     return Page(**response.data[0])
@@ -52,11 +54,40 @@ def get_pages_today_by_user(supabase: Client, uid: str):
     response = (
         supabase.table("pages")
             .select("*")
-            .eq("date_id", today())
+            .eq("date_id", get_today_by_user(supabase, uid).id)
             .execute()
     )
     if response.data:
         return [Page(**page) for page in response.data]
     else:
-        return None
+        return []
     
+def get_top_pages_today_by_user(supabase: Client, uid: str, limit: int):
+    response = get_pages_today_by_user(supabase, uid)
+
+    if response:
+        return sorted(response, key=lambda x: x.times_visited if x.times_visited else 1, reverse=True)[:limit]
+    else:
+        return []
+    
+def increment_page_times_visited(supabase: Client, uid: str, url: str):
+    response = (
+        supabase.table("pages")
+            .select("*")
+            .eq("url", url)
+            .eq("date_id", get_today_by_user(supabase, uid).id)
+            .execute()
+    )
+
+    if response.data:
+        page = Page(**response.data[0])
+        response = (
+            supabase.table("pages")
+                .update({"times_visited": page.times_visited + 1 if page.times_visited else 2})
+                .eq("id", page.id)
+                .execute()
+        )
+
+        return page
+    
+    return None

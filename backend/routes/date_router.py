@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Request
+from services.page import get_top_pages_today_by_user
 from services.profile import get_profile_by_id
 
 from services.date import get_all_today, get_today_by_user
@@ -17,11 +18,13 @@ async def get_today_handler(request: Request, uid: str):
     """
 
     result = get_today_by_user(request.app.supabase, uid)
+    print([page.url for page in get_top_pages_today_by_user(request.app.supabase, uid, 5)])
     return {
         "name": get_profile_by_id(request.app.supabase, uid).name,
         "date": result.date,
         "summary": result.summary,
         "one_sentence_summary": result.one_sentence_summary,
+        "links": [[page.title, page.url] for page in get_top_pages_today_by_user(request.app.supabase, uid, 5)],
     }
 
 
@@ -40,4 +43,5 @@ async def get_relevant_coworkers_today_handler(request: Request, uid: str):
         "date": result.date,
         "summary": result.summary,
         "one_sentence_summary": result.one_sentence_summary,
+        "links": [[page.title, page.url] for page in get_top_pages_today_by_user(request.app.supabase, result.uid, 5)],
     } for result in results]

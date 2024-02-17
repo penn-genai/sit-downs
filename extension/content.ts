@@ -64,7 +64,7 @@ window.addEventListener("load", async () => {
             url: document.URL,
           }
       })
-    }, 10)
+    }, 1000)
   })
 
 export const config: PlasmoCSConfig = {

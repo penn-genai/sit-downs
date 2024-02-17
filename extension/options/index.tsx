@@ -63,7 +63,7 @@ function OptionsIndex() {
           action={"are " + myResults.one_sentence_summary.split(" ").slice(2).join(" ")}
           date={myResults.date}
           text={myResults.summary}
-          links={[]}
+          links={myResults.links}
         />
         {results.map((post, index) => (
           <SummaryCard
@@ -72,7 +72,7 @@ function OptionsIndex() {
             action={post.one_sentence_summary.split(" ").slice(1).join(" ")}
             date={post.date}
             text={post.summary}
-            links={[]}
+            links={myResults.links}
           />
         ))}
       </div>
