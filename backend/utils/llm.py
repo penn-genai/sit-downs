@@ -57,7 +57,7 @@ def summarize_summary(llm: OpenAI, summary):
     res = llm.chat.completions.create(
     model="mistral-7b",
     messages=[
-        {"role": "system", "content": "Summarize the following paragraph into one concise sentence with less than 10 words."},
+        {"role": "system", "content": "Summarize the following paragraph into one concise sentence with less than 10 words. Be in present-continuous tense."},
         {"role": "user", "content": summary}
         ],
         temperature=0.6,
@@ -83,21 +83,6 @@ def other_k_people(llm: OpenAI, target, neighbors):
     if (len(arr) < 1):
         raise ValueError("No output")
     
-    return arr[1]
-
-def short_display(llm: OpenAI, target):
-    res = llm.chat.completions.create(
-    model="mistral-7b",
-    messages=[
-        {"role": "system", "content": "You will be given a summary of a person's workday. Summarize it into one very short sentence in the present-continuous tense."},
-        {"role": "user", "content": target}
-        ],
-        temperature=0.6,
-        max_tokens=512,
-    )
-    arr = res.choices[0].message.content.split("[/INST]")
-    if (len(arr) < 1):
-        raise ValueError("No output")
     return arr[1]
 
 

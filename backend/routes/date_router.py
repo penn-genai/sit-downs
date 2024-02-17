@@ -2,7 +2,8 @@ from fastapi import APIRouter, Request
 from services.page import get_top_pages_today_by_user
 from services.profile import get_profile_by_id
 
-from services.date import create_today_by_user, get_all_today, get_today_by_user
+from services.date import create_today_by_user, get_all_today, get_today_by_user, get_date_by_id
+from services.page import get_page_by_id
 
 
 date_router = APIRouter(
@@ -48,3 +49,11 @@ async def get_relevant_coworkers_today_handler(request: Request, uid: str):
         "one_sentence_summary": result.one_sentence_summary,
         "links": [[page.title, page.url] for page in get_top_pages_today_by_user(request.app.supabase, result.uid, 5)],
     } for result in results]
+
+
+async def get_profile(uid:str):
+    response = get_date_by_id(uid)
+    every_page = get_page_by_id(response.id)
+    print(every_page)
+
+get_profile("fb67383f-12de-4c07-a423-ed7faad8b7a3")
