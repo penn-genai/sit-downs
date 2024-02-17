@@ -6,7 +6,7 @@ export interface SummaryCardProps {
   text: string
   date: string
   action: string
-  links: [string, string][]
+  links: [string, string, int, string][]
 }
 
 const SummaryCard = ({
@@ -40,16 +40,13 @@ const SummaryCard = ({
                 href={link[1]}
                 className="text-primary hover:text-purple-500"
                 onClick={(e) => e.stopPropagation()}>
-                {link[0].split(".")[0]}
+                {link[0].split(".")[0] ? link[0].split(".")[0] : "[No Title]"}
               </a>
               <div className="text-text-secondary text-xs mb-2">
-                Visited 2 times
+                Visited {link[2]} times
               </div>
               <div className="text-text-secondary">
-                Benjamin is currently working on a project related to using Git
-                for version control, as evidenced by their browsing of Google
-                search results for "git commands" and the Git Cheat Sheet for
-                Education provided by GitHub.
+                {link[3]}
               </div>
             </div>
           ))}
@@ -62,7 +59,7 @@ const SummaryCard = ({
               href={link[1]}
               className="text-primary hover:text-purple-500 mr-4"
               onClick={(e) => e.stopPropagation()}>
-              {link[0].split(".")[0]}
+              {link[0].split(".")[0] ? link[0].split(".")[0] : "[No Title]"}
             </a>
           ))}
         </div>
