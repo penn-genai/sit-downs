@@ -13,7 +13,7 @@ module.exports = {
         background: "#111111",
         "background-light": "#222222",
         "text-primary": "#dddddd",
-        "text-secondary": "#b7b1c9",
+        "text-secondary": "#B4B4B4",
         blur: "#b99ee7",
         transparent: "transparent",
         "border-color": "#ffffff20"
@@ -30,7 +30,7 @@ module.exports = {
           width: "100%",
           minHeight: "3rem",
           borderRadius: "0.75rem",
-          color: "#ffffff",
+          color: "#dddddd",
           fontWeight: "500",
           fontSize: "0.875rem",
           background: "#222222",

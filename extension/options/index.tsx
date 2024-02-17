@@ -54,10 +54,13 @@ function OptionsIndex() {
       <div className="h-full min-h-screen w-full bg-background text-text-primary">
         <Header />
         <div className="container mx-auto max-w-screen-lg flex flex-col px-6 mt-24 mb-12">
-          <p className="text-4xl py-6">Hey there!</p>
-          <p className="text-2xl py-6">
+          <div className="text-lg text-primary">{formattedDate}</div>
+          <div className="text-4xl mt-2 mb-4">
+            Hey there, welcome to SitDowns!
+          </div>
+          <div className="flex justify-center px-6 py-4 w-full border border-border-color rounded-full bg-background-light text-lg text-text-primary my-4 focus:outline-none">
             You're not logged in. Please log in to see your feed.
-          </p>
+          </div>
         </div>
       </div>
     )
@@ -68,7 +71,13 @@ function OptionsIndex() {
       <div className="h-full min-h-screen w-full bg-background text-text-primary">
         <Header />
         <div className="container mx-auto max-w-screen-lg flex flex-col px-6 mt-24 mb-12">
-          <p className="text-4xl py-6">Loading...</p>
+          <div className="text-lg text-primary">{formattedDate}</div>
+          <div className="text-4xl mt-2 mb-4">
+            Hey {user.user_metadata.name}, here are today's sit downs!
+          </div>
+          <div className="flex justify-center animate-pulse px-6 py-4 w-full border border-border-color rounded-full bg-background-light text-lg text-text-primary my-4 focus:outline-none">
+            Loading...
+          </div>
         </div>
       </div>
     )
@@ -90,8 +99,19 @@ function OptionsIndex() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <SummaryCard
-          person={myResults.one_sentence_summary_second_person ? myResults.one_sentence_summary_second_person.split(" ")[0] : myResults.one_sentence_summary.split(" ")[0]}
-          action={myResults.one_sentence_summary_second_person ? myResults.one_sentence_summary_second_person.split(" ").slice(1).join(" ") : myResults.one_sentence_summary.split(" ").slice(1).join(" ")}
+          person={
+            myResults.one_sentence_summary_second_person
+              ? myResults.one_sentence_summary_second_person.split(" ")[0]
+              : myResults.one_sentence_summary.split(" ")[0]
+          }
+          action={
+            myResults.one_sentence_summary_second_person
+              ? myResults.one_sentence_summary_second_person
+                  .split(" ")
+                  .slice(1)
+                  .join(" ")
+              : myResults.one_sentence_summary.split(" ").slice(1).join(" ")
+          }
           date={myResults.date}
           text={myResults.summary}
           links={myResults.links}
