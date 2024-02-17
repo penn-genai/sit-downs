@@ -106,6 +106,10 @@ function OptionsIndex() {
             links={post.links}
           />
         ))}
+        <iframe src="https://atlas.nomic.ai/data/vincetiu8/sit-downs-pages/map" style={{
+          width: 1280,
+          height: 720
+        }} />
       </div>
     </div>
   )

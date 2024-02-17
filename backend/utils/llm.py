@@ -42,7 +42,7 @@ def summarize_date(llm: OpenAI, name: str, summaries: list[str]):
     res = llm.chat.completions.create(
     model="mistral-7b",
     messages=[
-        {"role": "system", "content": f"From the following summaries of web pages a user '{name}' has been browsing, infer what they have been working on. Do not give an introduction. Do not use pronouns or an explicit subject. Start Each summary is separated by a `"},
+        {"role": "system", "content": f"From the following summaries of web pages a user '{name}' has been browsing, infer what they have been working on. Do not give an introduction. Do not use pronouns or an explicit subject. Be in present-continuous tense. Start Each summary is separated by a `"},
         {"role": "user", "content": allSummaries}
         ],
         temperature=0.6,
@@ -82,6 +82,7 @@ def other_k_people(llm: OpenAI, target, neighbors):
     arr = res.choices[0].message.content.split("[/INST]")
     if (len(arr) < 1):
         raise ValueError("No output")
+    
     return arr[1]
 
 def short_display(llm: OpenAI, target):
@@ -100,3 +101,5 @@ def short_display(llm: OpenAI, target):
     return arr[1]
     
     
+
+    # neighbors = [{uid: 1, content: stuff}, {uid: 2, content: other stuff}]

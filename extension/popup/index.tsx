@@ -118,7 +118,7 @@ const IndexPopup = () => {
             </label>
           </div>
           <button
-            className="btn bg-background-light my-2"
+            className="btn my-2 border-primary"
             onClick={() => goToDashboard()}>
             Dashboard
           </button>
@@ -159,7 +159,7 @@ const IndexPopup = () => {
           />
 
           <button
-            className="btn bg-background-light mt-4 mb-2"
+            className="btn mt-4 mb-2 border-primary"
             onClick={(e) => {
               signup
                 ? handleEmailSignup(email, password, name)

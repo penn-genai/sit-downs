@@ -15,5 +15,8 @@ def find_others_user_prompt(target, neighbors):
     `{neighbors}`
 
     OUTPUT ONLY THE ASSOCIATED UUIDs OF THE SELECTED EMPLOYEES. DO NOT GIVE ANY EXPLANATION OR REASONING
+
+    Below is an example output:
+    7, 9, 10
     """
 
