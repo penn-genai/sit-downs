@@ -20,7 +20,7 @@ def create_date(supabase: Client, date: str, uid: str, summary: str, one_sentenc
             .insert({"date": date, "uid": uid, "summary": summary, "one_sentence_summary": one_sentence_summary, "one_sentence_summary_second_person": one_sentence_summary_second_person})
             .execute()
     )
-    return response
+    return response.data[0]
 
 def create_today_by_user(supabase: Client, uid: str, summary: str, one_sentence_summary: str, one_sentence_summary_second_person: str):
     return create_date(supabase, today(), uid, summary, one_sentence_summary, one_sentence_summary_second_person)

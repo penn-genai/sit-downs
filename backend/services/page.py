@@ -58,6 +58,9 @@ def get_pages_today_by_user(supabase: Client, uid: str):
             .execute()
     )
     if response.data:
+        for page in response.data:
+            if "times_visited" not in page or not page["times_visited"]:
+                page["times_visited"] = 1
         return [Page(**page) for page in response.data]
     else:
         return []
@@ -76,8 +79,11 @@ def get_all_top_pages_today(supabase: Client, limit: int):
             .select("*")
             .execute()
     )
+    for page in response.data:
+        if "times_visited" not in page or not page["times_visited"]:
+            page["times_visited"] = 1
     pages = [Page(**page) for page in response.data]
-    sorted_pages = sorted(pages, key=lambda x: x.times_visited if x.times_visited else 1, reverse=True)[:limit]
+    sorted_pages = sorted(pages, key=lambda x: x.times_visited, reverse=True)
     users = {}
     for sorted_page in sorted_pages:
         if sorted_page.date_id not in users:
