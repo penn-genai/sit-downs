@@ -52,6 +52,15 @@ def get_today_by_user(supabase: Client, uid: str):
     else:
         return None
     
+def get_all_today(supabase: Client):
+    response = (
+        supabase.table("dates")
+            .select("*")
+            .eq("date", today())
+            .execute()
+    )
+    return [Date(**date) for date in response.data]
+    
 def update_date_summary(supabase: Client, id: str, summary: str):
     response = (
         supabase.table("dates")

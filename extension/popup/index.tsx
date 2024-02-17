@@ -6,6 +6,7 @@ import type { Provider, User } from "@supabase/supabase-js"
 
 import "../style.css"
 import { supabase } from "~core/supabase"
+import { sendToBackground } from "@plasmohq/messaging"
 
 const IndexPopup = () => {
   const [user, setUser] = useStorage<User>({

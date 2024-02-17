@@ -34,7 +34,8 @@ async def process_page_handler(request: Request, uid: str, input: ProcessPageReq
     today = get_today_by_user(request.app.supabase, uid)
 
     if not today:
-        today = create_today_by_user(request.app.supabase, uid, "No activity so far.")
+        create_today_by_user(request.app.supabase, uid, "No activity so far.")
+        today = get_today_by_user(request.app.supabase, uid)
 
     create_page(request.app.supabase, input.title, input.url, input.body, page_summary, today.id)
 

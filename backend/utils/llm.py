@@ -2,7 +2,7 @@ from openai import OpenAI
 import os
 from dotenv import load_dotenv
 from transformers import AutoTokenizer
-from prompts import find_others_system_prompt, find_others_user_prompt
+from utils.prompts import find_others_system_prompt, find_others_user_prompt
 
 load_dotenv()
 
@@ -42,7 +42,7 @@ def summarize_date(llm: OpenAI, summaries: list[str]):
     res = llm.chat.completions.create(
     model="mistral-7b",
     messages=[
-        {"role": "system", "content": "From the following summaries of web pages a user has been browsing, infer what they have been working on. Do not give an introduction and write in third-person without using pronouns. Each summary is separated by a `"},
+        {"role": "system", "content": "From the following summaries of web pages a user has been browsing, infer what they have been working on. Do not give an introduction. Write in first-person without using pronouns, such as 'I' or 'you'. Each summary is separated by a `"},
         {"role": "user", "content": allSummaries}
         ],
         temperature=0.6,

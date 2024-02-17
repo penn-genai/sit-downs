@@ -15,17 +15,8 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
     return
   }
 
-  const message = await fetch(`http://localhost:8000/page/${user.id}`, 
-    {
-      headers: {
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify(req.body)
-    }
-  )
- 
-  res.send({message})
+  const message = await fetch(`http://localhost:8000/date/today/relevant/${user.id}`)
+  res.send(await message.json())
 }
  
 export default handler

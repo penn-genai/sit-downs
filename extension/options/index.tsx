@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import "../style.css"
 
@@ -6,6 +6,7 @@ import SummaryCard from "./SummaryCard"
 import { Storage } from "@plasmohq/storage"
 import { useStorage } from "@plasmohq/storage/hook"
 import type { User } from "@supabase/supabase-js"
+import { sendToBackground } from "@plasmohq/messaging"
 
 function OptionsIndex() {
   const [user, setUser] = useStorage<User>({
@@ -56,6 +57,18 @@ function OptionsIndex() {
       ]
     }
   ]
+
+  useEffect(() => {
+    if (!user) {
+      return
+    }
+
+    const loadData = async () => {
+      const response = await sendToBackground({name: "getRelevantToday"})
+      console.log(response)
+    }
+    loadData()
+  }, [user])
 
   if (!user) {
     return (
