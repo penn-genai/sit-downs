@@ -3,9 +3,15 @@ import { useState } from "react"
 import "../style.css"
 
 import SummaryCard from "./SummaryCard"
+import { Storage } from "@plasmohq/storage"
+import { useStorage } from "@plasmohq/storage/hook"
+import type { User } from "@supabase/supabase-js"
 
 function OptionsIndex() {
-  const [data, setData] = useState("")
+  const [user, setUser] = useStorage<User>({
+    key: "user",
+    instance: new Storage()
+  })
 
   // Mock data for the feed
   const posts = [
@@ -51,10 +57,21 @@ function OptionsIndex() {
     }
   ]
 
+  if (!user) {
+    return (
+      <div className="h-full min-h-screen w-full bg-background text-text-primary">
+        <div className="container mx-auto max-w-screen-lg flex flex-col px-6">
+          <p className="text-4xl py-6">Hey there!</p>
+          <p className="text-2xl py-6">You're not logged in. Please log in to see your feed.</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="h-full min-h-screen w-full bg-background text-text-primary">
       <div className="container mx-auto max-w-screen-lg flex flex-col px-6">
-        <p className="text-4xl py-6">Hey Vince!</p>
+        <p className="text-4xl py-6">Hey {user.user_metadata.name}!</p>
         {posts.map((post, index) => (
           <SummaryCard
             key={index}

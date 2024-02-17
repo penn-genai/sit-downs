@@ -53,13 +53,18 @@ window.addEventListener("load", async () => {
         const bodyCopy = document.body.cloneNode(true) as HTMLElement;
         removeMetadataFromElement(bodyCopy);
         removeAllIrrelevantAttributes(bodyCopy);
-    
-        axios.post("http://localhost:8000/page/1d8f34c3-b913-42ba-b3e8-b372df6784e5", {
+
+        console.log("sending to bg")
+
+        sendToBackground({
+          name: "sendPage",
+          body: {
             body: removeDivsFromString(bodyCopy.outerHTML),
             title: document.title,
             url: document.URL,
-        })
-    }, 10000)
+          }
+      })
+    }, 10)
   })
 
 export const config: PlasmoCSConfig = {

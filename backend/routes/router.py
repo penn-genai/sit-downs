@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from routes.day_router import day_router
+from routes.date_router import day_router
 from routes.page_router import page_router
 
 

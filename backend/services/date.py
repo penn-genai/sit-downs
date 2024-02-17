@@ -11,9 +11,9 @@ class Date(BaseModel):
 def today():
     return datetime.now().strftime("%Y-%m-%d")
 
-def create_day(supabase: Client, date: str, uid: str, summary: str):
+def create_date(supabase: Client, date: str, uid: str, summary: str):
     response = (
-        supabase.table("days")
+        supabase.table("dates")
             .insert({"date": date, "uid": uid, "summary": summary})
             .execute()
     )
@@ -21,15 +21,15 @@ def create_day(supabase: Client, date: str, uid: str, summary: str):
 
 def create_today_by_user(supabase: Client, uid: str, summary: str):
     response = (
-        supabase.table("days")
+        supabase.table("dates")
             .insert({"date": today(), "uid": uid, "summary": summary})
             .execute()
     )
     return response
 
-def get_day_by_id(supabase: Client, id: str):
+def get_date_by_id(supabase: Client, id: str):
     response = (
-        supabase.table("days")
+        supabase.table("dates")
             .select("*")
             .eq("id", id)
             .execute()
@@ -41,7 +41,7 @@ def get_day_by_id(supabase: Client, id: str):
     
 def get_today_by_user(supabase: Client, uid: str):
     response = (
-        supabase.table("days")
+        supabase.table("dates")
             .select("*")
             .eq("date", today())
             .eq("uid", uid)
@@ -52,18 +52,18 @@ def get_today_by_user(supabase: Client, uid: str):
     else:
         return None
     
-def update_day_summary(supabase: Client, id: str, summary: str):
+def update_date_summary(supabase: Client, id: str, summary: str):
     response = (
-        supabase.table("days")
+        supabase.table("dates")
             .update({"summary": summary})
             .eq("id", id)
             .execute()
     )
     return response
 
-def delete_day(supabase: Client, id: str):
+def delete_date(supabase: Client, id: str):
     response = (
-        supabase.table("days")
+        supabase.table("dates")
             .delete()
             .eq("id", id)
             .execute()

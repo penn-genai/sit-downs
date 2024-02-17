@@ -1,12 +1,35 @@
 import type { PlasmoMessaging } from "@plasmohq/messaging"
+import { Storage } from "@plasmohq/storage"
+import { useStorage } from "@plasmohq/storage/hook"
+import type { User } from "@supabase/supabase-js"
 import axios from "axios"
  
-const handleSendPage: PlasmoMessaging.MessageHandler = async (req, res) => {
-  const message = await axios.post("http://localhost:8000/page/1d8f34c3-b913-42ba-b3e8-b372df6784e4", req.body)
+const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
+  const storage = new Storage()
+
+  const user = await storage.get<User>("user")
+
+  if (!user.id) {
+    res.send({
+      status: "error",
+      message: "No user is logged in"
+    })
+    return
+  }
+
+  const message = await fetch(`http://localhost:8000/page/${user.id}`, 
+    {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify(req.body)
+    }
+  )
  
   res.send({
     message
   })
 }
  
-export default handleSendPage
+export default handler

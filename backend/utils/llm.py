@@ -37,7 +37,7 @@ def summarize_webpage(llm: OpenAI, title, url, body):
         raise ValueError("No output")
     return arr[1]
     
-def summarize_day(llm: OpenAI, summaries: list[str]):
+def summarize_date(llm: OpenAI, summaries: list[str]):
     allSummaries = "`".join(summaries)[:4000]
     res = llm.chat.completions.create(
     model="mistral-7b",

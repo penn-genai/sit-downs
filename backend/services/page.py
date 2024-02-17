@@ -1,12 +1,12 @@
 from pydantic import BaseModel
 from supabase import Client
 
-from services.day import today
+from services.date import today
 
 
 class Page(BaseModel):
     id: int
-    timestamp: int
+    timestamp: str
     title: str
     url: str
     body: str
