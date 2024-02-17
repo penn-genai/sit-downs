@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request
 from services.page import get_top_pages_today_by_user
 from services.profile import get_profile_by_id
 
-from services.date import get_all_today, get_today_by_user
+from services.date import create_today_by_user, get_all_today, get_today_by_user
 
 
 date_router = APIRouter(
@@ -18,6 +18,10 @@ async def get_today_handler(request: Request, uid: str):
     """
 
     result = get_today_by_user(request.app.supabase, uid)
+    if not result:
+        profile = get_profile_by_id(request.app.supabase, uid)
+        result = create_today_by_user(request.app.supabase, uid, "No activity so far.", f"{profile.name} have not done anything so far. Get to work!")
+
     return {
         "name": get_profile_by_id(request.app.supabase, uid).name,
         "date": result.date,
