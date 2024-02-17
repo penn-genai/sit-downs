@@ -31,7 +31,7 @@ def summarize_webpage(llm: OpenAI, title, url, body):
         messages=[
             {
                 "role": "system",
-                "content": "Summarize what the following web page created by this title, URL and DOM does in a short, concise paragraph of LESS THAN 100 WORDS. This paragarph should not contain URLs.",
+                "content": "Summarize what the following web page created by this title, URL and DOM does in a short, concise paragraph of LESS THAN 100 WORDS. DO NOT embed URLs or links into the paragraph.",
             },
             {"role": "user", "content": webSequence},
         ],
@@ -51,7 +51,7 @@ def summarize_date(llm: OpenAI, name: str, summaries: list[str]):
         messages=[
             {
                 "role": "system",
-                "content": f"From the following summaries of web pages a user '{name}' has been browsing, infer what they have been working on. This paragraph should be LESS THAN 150 words and should not include URLs. Do not give an introduction. Do not use pronouns or an explicit subject. Be in present-continuous tense. Start Each summary is separated by a `",
+                "content": f"From the following summaries of web pages a user '{name}' has been browsing, infer what they have been working on. This paragraph should be LESS THAN 150 words. DO NOT embed URLs or links into the paragraph. Do not give an introduction. Do not use pronouns or an explicit subject. Be in present-continuous tense. Start Each summary is separated by a `",
             },
             {"role": "user", "content": allSummaries},
         ],
