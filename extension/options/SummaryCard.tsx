@@ -17,7 +17,7 @@ const SummaryCard = ({
 }: SummaryCardProps) => {
   return (
     <div
-      className={`p-6 rounded-[2rem] my-4 space-y-2 bg-background-light ${person == "You" ? "border-2 border-primary" : ""}`}>
+      className={`p-6 rounded-[2rem] my-4 space-y-2 bg-background-light ${person == "You" ? "border-2 border-primary" : "border-2 border-border-color"}`}>
       <div>
         <span className="text-xl text-left font-bold">{person}</span>
         <span className="text-xl">&nbsp;{action}</span>
