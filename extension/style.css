@@ -4,6 +4,5 @@
 
 /* Set default font to Inter */
 body {
-  font-family: 'Inter', sans-serif; /* Use sans-serif as a fallback */
-  background-color: #18181b;
+  font-family: "Inter", sans-serif; /* Use sans-serif as a fallback */
 }
