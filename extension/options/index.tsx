@@ -20,6 +20,7 @@ function OptionsIndex() {
   const [myResults, setMyResults] = useState<any>({})
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState("")
   const today: Date = new Date()
   const options: Intl.DateTimeFormatOptions = { month: "long", day: "numeric" }
   const formattedDate: string = today.toLocaleDateString("en-US", options)
@@ -38,6 +39,10 @@ function OptionsIndex() {
     }
     loadData()
   }, [user])
+
+  const filteredResults = results.filter((post) =>
+    post.one_sentence_summary.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   if (!user) {
     return (
@@ -68,6 +73,15 @@ function OptionsIndex() {
     <div className="h-full min-h-screen w-full bg-background text-text-primary">
       <Header />
       <div className="container mx-auto max-w-screen-lg flex flex-col px-6 mt-24 mb-12">
+        <div className="flex justify-center py-4">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="px-4 py-2 w-full max-w-md border rounded-md text-lg"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
         <div className="text-lg text-primary">{formattedDate}</div>
         <div className="text-4xl mt-2 mb-6">
           Hey {user.user_metadata.name}, here are today's sit downs!
@@ -82,7 +96,7 @@ function OptionsIndex() {
           text={myResults.summary}
           links={myResults.links}
         />
-        {results.map((post, index) => (
+        {filteredResults.map((post, index) => (
           <SummaryCard
             key={index}
             person={post.one_sentence_summary.split(" ")[0]}
