@@ -19,7 +19,7 @@ module.exports = {
         "border-color": "#ffffff20"
       },
       fontFamily: {
-        inter: ["Inter"]
+        inter: ["Inter", "sans-serif"]
       }
     }
   },

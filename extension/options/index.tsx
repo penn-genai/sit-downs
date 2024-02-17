@@ -2,11 +2,14 @@ import { useEffect, useState } from "react"
 
 import "../style.css"
 
-import SummaryCard from "./SummaryCard"
+import type { User } from "@supabase/supabase-js"
+
+import { sendToBackground } from "@plasmohq/messaging"
 import { Storage } from "@plasmohq/storage"
 import { useStorage } from "@plasmohq/storage/hook"
-import type { User } from "@supabase/supabase-js"
-import { sendToBackground } from "@plasmohq/messaging"
+
+import Header from "./Header"
+import SummaryCard from "./SummaryCard"
 
 function OptionsIndex() {
   const [user, setUser] = useStorage<User>({
@@ -17,6 +20,9 @@ function OptionsIndex() {
   const [myResults, setMyResults] = useState<any>({})
   const [results, setResults] = useState([])
   const [loading, setLoading] = useState(true)
+  const today: Date = new Date()
+  const options: Intl.DateTimeFormatOptions = { month: "long", day: "numeric" }
+  const formattedDate: string = today.toLocaleDateString("en-US", options)
 
   useEffect(() => {
     if (!user) {
@@ -24,9 +30,9 @@ function OptionsIndex() {
     }
 
     const loadData = async () => {
-      const response = await sendToBackground({name: "getRelevantToday"})
+      const response = await sendToBackground({ name: "getRelevantToday" })
       setResults(response)
-      const me = await sendToBackground({name: "getMeToday"})
+      const me = await sendToBackground({ name: "getMeToday" })
       setMyResults(me)
       setLoading(false)
     }
@@ -36,9 +42,12 @@ function OptionsIndex() {
   if (!user) {
     return (
       <div className="h-full min-h-screen w-full bg-background text-text-primary">
-        <div className="container mx-auto max-w-screen-lg flex flex-col px-6">
+        <Header />
+        <div className="container mx-auto max-w-screen-lg flex flex-col px-6 mt-24 mb-12">
           <p className="text-4xl py-6">Hey there!</p>
-          <p className="text-2xl py-6">You're not logged in. Please log in to see your feed.</p>
+          <p className="text-2xl py-6">
+            You're not logged in. Please log in to see your feed.
+          </p>
         </div>
       </div>
     )
@@ -47,7 +56,8 @@ function OptionsIndex() {
   if (loading) {
     return (
       <div className="h-full min-h-screen w-full bg-background text-text-primary">
-        <div className="container mx-auto max-w-screen-lg flex flex-col px-6">
+        <Header />
+        <div className="container mx-auto max-w-screen-lg flex flex-col px-6 mt-24 mb-12">
           <p className="text-4xl py-6">Loading...</p>
         </div>
       </div>
@@ -56,11 +66,18 @@ function OptionsIndex() {
 
   return (
     <div className="h-full min-h-screen w-full bg-background text-text-primary">
-      <div className="container mx-auto max-w-screen-lg flex flex-col px-6">
-        <p className="text-4xl py-6">Hey {user.user_metadata.name}!</p>
+      <Header />
+      <div className="container mx-auto max-w-screen-lg flex flex-col px-6 mt-24 mb-12">
+        <div className="text-lg text-primary">{formattedDate}</div>
+        <div className="text-4xl mt-2 mb-6">
+          Hey {user.user_metadata.name}, here are today's sit downs!
+        </div>
         <SummaryCard
           person="You"
-          action={"are " + myResults.one_sentence_summary.split(" ").slice(2).join(" ")}
+          action={
+            "are " +
+            myResults.one_sentence_summary.split(" ").slice(2).join(" ")
+          }
           date={myResults.date}
           text={myResults.summary}
           links={myResults.links}
