@@ -8,20 +8,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#ffd67d",
-        "primary-alt": "#b39044",
-        secondary: "#181c80",
-        "secondary-alt": "#0f0e43",
-        "background-light": "#06092b",
-        background: "#04000d",
-        "text-primary": "#ffffff",
+        primary: "#b986ff",
+        secondary: "#b986ff",
+        background: "#111111",
+        "background-light": "#222222",
+        "text-primary": "#dddddd",
         "text-secondary": "#b7b1c9",
         blur: "#b99ee7",
         transparent: "transparent",
         "border-color": "#ffffff10"
       },
       fontFamily: {
-        inter: ["Inter", "sans-serif"]
+        inter: ["Inter"]
       }
     }
   },
