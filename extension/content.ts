@@ -1,3 +1,4 @@
+import { sendToBackground } from "@plasmohq/messaging";
 import axios from "axios";
 import type { PlasmoCSConfig } from "plasmo";
 
@@ -47,18 +48,19 @@ const removeDivsFromString = (str: string) => {
     return str.replace(/<div.*?>/g, "").replace(/<\/div>/g, "");
 }
 
-window.addEventListener("load", () => {
-    console.log(document.head)
-    const bodyCopy = document.body.cloneNode(true) as HTMLElement;
-    removeMetadataFromElement(bodyCopy);
-    removeAllIrrelevantAttributes(bodyCopy);
-    console.log(
-      removeDivsFromString(bodyCopy.outerHTML).substring(0, 10000)
-    );
-    axios.post("http://localhost:8000/api", {
-        body: bodyCopy.outerHTML,
-        title: document.title,
-    })
+window.addEventListener("load", async () => {
+    setTimeout(() => {
+        const bodyCopy = document.body.cloneNode(true) as HTMLElement;
+        removeMetadataFromElement(bodyCopy);
+        removeAllIrrelevantAttributes(bodyCopy);
+        console.log(bodyCopy.outerHTML);
+    
+        axios.post("http://localhost:8000/page/1d8f34c3-b913-42ba-b3e8-b372df6784e5", {
+            body: bodyCopy.outerHTML,
+            title: document.title,
+            url: document.URL,
+        })
+    }, 10000)
   })
 
 export const config: PlasmoCSConfig = {

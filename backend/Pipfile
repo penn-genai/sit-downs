@@ -4,6 +4,11 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+python-dotenv = "*"
+transformers = "*"
+fastapi = "*"
+supabase = "*"
+openai = "*"
 
 [dev-packages]
 

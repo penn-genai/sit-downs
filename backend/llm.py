@@ -20,12 +20,13 @@ class llm:
             return webSequence
         return tokenizer.decode(tokenized.input_ids[0][:4096])
 
-    def summarize_webpage(self, webSequence):
-        webSequence = self.cut(webSequence)
+    def summarize_webpage(self, title, url, body):
+        webSequence = f"TITLE:{title},URL:{url},BODY:{body}"
+        webSequence = self.cut(webSequence[:4096])
         res = self.client.chat.completions.create(
         model="mistral-7b",
         messages=[
-            {"role": "system", "content": "Summarize what the following web page created by this DOM does in a short, concise paragraph of LESS THAN 100 WORDS:"},
+            {"role": "system", "content": "Summarize what the following web page created by this title, URL and DOM does in a short, concise paragraph of LESS THAN 100 WORDS:"},
             {"role": "user", "content": webSequence}
             ],
             temperature=0.6,
@@ -37,11 +38,11 @@ class llm:
         return arr[1]
     
     def summarize_day(self, summaries):
-        allSummaries = "`".join(summaries)
+        allSummaries = "`".join(summaries)[:4096]
         res = self.client.chat.completions.create(
         model="mistral-7b",
         messages=[
-            {"role": "system", "content": "Summarize the following summaries into an overarching summary of the websites visited. Each summary is separated by a `"},
+            {"role": "system", "content": "From the following summaries of web pages a user has been browsing, infer what they have been working on. Do not give an introduction and write in third-person without using pronouns. Each summary is separated by a `"},
             {"role": "user", "content": allSummaries}
             ],
             temperature=0.6,
