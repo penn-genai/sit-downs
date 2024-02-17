@@ -40,9 +40,14 @@ function OptionsIndex() {
     loadData()
   }, [user])
 
-  const filteredResults = results.filter((post) =>
-    post.one_sentence_summary.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const filteredResults = results.filter((post) => {
+    return (
+      post.one_sentence_summary
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      post.summary.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  })
 
   if (!user) {
     return (
