@@ -70,7 +70,7 @@ def summarize_summary(llm: OpenAI, name: str, summary: str):
         messages=[
             {
                 "role": "system",
-                "content": f"Summarize the following paragraph into one concise sentence with less than 10 words in present-continuous tense with active voice. Return two versions of the sentence, the first one in third-person and the second one in second-person, separated by a period. Example: '{name} is working on a project.`You are working on a project.'",
+                "content": f"Summarize the following paragraph into one concise sentence with less than 10 words in third-person present-continuous tense with active voice. Example: {name} is working on a project.",
             },
             {"role": "user", "content": summary},
         ],
@@ -80,8 +80,26 @@ def summarize_summary(llm: OpenAI, name: str, summary: str):
     arr = res.choices[0].message.content.split("[/INST]")
     if len(arr) < 1:
         raise ValueError("No output")
-    clean_string = arr[1].replace("\n", "").replace("\t", "").replace("  ", " ").split(".")
-    return [clean_string[0].strip() + ".", clean_string[1].strip() + "."]
+    clean_string = arr[1].replace("\n", "").replace("\t", "").replace("  ", " ").strip()
+
+    res = llm.chat.completions.create(
+        model="mistral-7b",
+        messages=[
+            {
+                "role": "system",
+                "content": f"Summarize the following paragraph into one concise sentence with less than 10 words in second-person present-continuous tense with active voice. Example: You are working on a project.",
+            },
+            {"role": "user", "content": summary},
+        ],
+        temperature=0.6,
+        max_tokens=512,
+    )
+    arr = res.choices[0].message.content.split("[/INST]")
+    if len(arr) < 1:
+        raise ValueError("No output")
+    clean_string_2 = arr[1].replace("\n", "").replace("\t", "").replace("  ", " ").strip()
+
+    return [clean_string, clean_string_2]
 
 
 def other_k_people(llm: OpenAI, target, neighbors):
