@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request
-from services.page import get_top_pages_today_by_user
-from services.profile import get_profile_by_id
+from utils.atlas import get_k_neighbors
+from services.page import get_all_top_pages_today, get_top_pages_today_by_user
+from services.profile import get_all_profiles, get_profile_by_id
 
 from services.date import create_today_by_user, get_all_today, get_today_by_user, get_date_by_id
 from services.page import get_page_by_id
@@ -40,15 +41,23 @@ async def get_relevant_coworkers_today_handler(request: Request, uid: str):
 
     # for now, we just return the first 3 coworkers
 
-    results = get_all_today(request.app.supabase)[:3]
-    results = filter(lambda result: result.uid != uid, results)
+    results = get_all_today(request.app.supabase)
+    my_summary = [result.summary for result in filter(lambda result: result.uid == uid, results)][0]
+    other_results = list(filter(lambda result: result.uid != uid, results))
+    other_summaries = [result.summary for result in other_results]
+    order = get_k_neighbors(my_summary, other_summaries)
+    ordered_results = [other_results[i] for i in order]
+
+    pages = get_all_top_pages_today(request.app.supabase, 5)
+    profiles = get_all_profiles(request.app.supabase)
+
     return [{
-        "name": get_profile_by_id(request.app.supabase, result.uid).name,
+        "name": profiles[result.uid].name,
         "date": result.date,
         "summary": result.summary,
         "one_sentence_summary": result.one_sentence_summary,
-        "links": [[page.title, page.url] for page in get_top_pages_today_by_user(request.app.supabase, result.uid, 5)],
-    } for result in results]
+        "links": [[page.title, page.url] for page in (pages[result.id] if result.id in pages else [])],
+    } for result in ordered_results]
 
 
 async def get_profile(uid:str):
