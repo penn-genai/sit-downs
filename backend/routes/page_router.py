@@ -22,8 +22,8 @@ async def get_today_page_handler(request: Request, uid: int):
 def update_date_summary_wrapper(request: Request, id: str, name: str):
     pages = get_pages_by_date_id(request.app.supabase, id)
     date_summary = summarize_date(request.app.llm, name, [page.summary for page in pages])
-    one_sentence_summary = summarize_summary(request.app.llm, date_summary)
-    update_date_summary(request.app.supabase, id, date_summary, one_sentence_summary)
+    [one_sentence_summary, one_sentence_summary_second_person] = summarize_summary(request.app.llm, name, date_summary)
+    update_date_summary(request.app.supabase, id, date_summary, one_sentence_summary, one_sentence_summary_second_person)
 
 class ProcessPageRequest(BaseModel):
     title: str
@@ -34,9 +34,10 @@ class ProcessPageRequest(BaseModel):
 @page_router.post("/{uid}")
 async def process_page_handler(request: Request, uid: str, input: ProcessPageRequest):
     today = get_today_by_user(request.app.supabase, uid)
+    profile = get_profile_by_id(request.app.supabase, uid)
 
     if not today:
-        create_today_by_user(request.app.supabase, uid, "No activity so far.", "No activity so far.")
+        create_today_by_user(request.app.supabase, uid, "No activity so far.", f"{profile.name} has no activity so far.", "You have no activity so far.")
         today = get_today_by_user(request.app.supabase, uid)
 
     result = increment_page_times_visited(request.app.supabase, uid, input.url)

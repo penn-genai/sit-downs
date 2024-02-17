@@ -64,13 +64,13 @@ def summarize_date(llm: OpenAI, name: str, summaries: list[str]):
     return arr[1]
 
 
-def summarize_summary(llm: OpenAI, summary):
+def summarize_summary(llm: OpenAI, name: str, summary: str):
     res = llm.chat.completions.create(
         model="mistral-7b",
         messages=[
             {
                 "role": "system",
-                "content": "Summarize the following paragraph into one concise sentence with less than 10 words. Be in present-continuous tense.",
+                "content": f"Summarize the following paragraph into one concise sentence with less than 10 words in present-continuous tense with active voice. Return two versions of the sentence, the first one in third-person and the second one in second-person, separated by a period. Example: '{name} is working on a project.`You are working on a project.'",
             },
             {"role": "user", "content": summary},
         ],
@@ -80,7 +80,8 @@ def summarize_summary(llm: OpenAI, summary):
     arr = res.choices[0].message.content.split("[/INST]")
     if len(arr) < 1:
         raise ValueError("No output")
-    return arr[1]
+    clean_string = arr[1].replace("\n", "").replace("\t", "").replace("  ", " ").split(".")
+    return [clean_string[0].strip() + ".", clean_string[1].strip() + "."]
 
 
 def other_k_people(llm: OpenAI, target, neighbors):

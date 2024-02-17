@@ -90,11 +90,8 @@ function OptionsIndex() {
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <SummaryCard
-          person="You"
-          action={
-            "are " +
-            myResults.one_sentence_summary.split(" ").slice(2).join(" ")
-          }
+          person={myResults.one_sentence_summary_second_person ? myResults.one_sentence_summary_second_person.split(" ")[0] : myResults.one_sentence_summary.split(" ")[0]}
+          action={myResults.one_sentence_summary_second_person ? myResults.one_sentence_summary_second_person.split(" ").slice(1).join(" ") : myResults.one_sentence_summary.split(" ").slice(1).join(" ")}
           date={myResults.date}
           text={myResults.summary}
           links={myResults.links}
