@@ -89,7 +89,7 @@ def short_display(llm: OpenAI, target):
     res = llm.chat.completions.create(
     model="mistral-7b",
     messages=[
-        {"role": "system", "content": "You will be given a summary of a person's workday. Summarize it into one very short sentence."},
+        {"role": "system", "content": "You will be given a summary of a person's workday. Summarize it into one very short sentence in the present-continuous tense."},
         {"role": "user", "content": target}
         ],
         temperature=0.6,
@@ -99,7 +99,19 @@ def short_display(llm: OpenAI, target):
     if (len(arr) < 1):
         raise ValueError("No output")
     return arr[1]
-    
-    
 
-    # neighbors = [{uid: 1, content: stuff}, {uid: 2, content: other stuff}]
+
+# llm = init_llm()
+# target = """{uid: fb67383f-12de-4c07-a423-ed7faad8b7a3, summary:  The user has been working on projects related to 
+#             artificial intelligence (AI) and data analysis, primarily using tools and platforms provided by Nomic.ai. 
+#             They have explored Nomic's AI tools, Atlas and GPT4All, which focus on data exploration, model quality enhancement, 
+#             and accessible AI. The user has also utilized Nomic Atlas for structuring and gaining insights from unstructured data,
+#               and has recently learned about the release of Nomic Embed, an open-source text embedding model. Additionally, the user 
+#               has been looking into the deepscatter project by nomic-ai, which is a library for creating zoomable, animated scatterplots 
+#               in the browser that can handle over a billion data points. They have accessed the GitHub repositories for both the deepscatter 
+#               project and Nomic AI's organization page, suggesting an interest in contributing to these projects or understanding their functionality in greater depth.}"""
+
+
+# neighbors = """{uid: fb67383f-12de-4c07-a423-ed7faad8b7a3, summary:   Based on the summaries, the user has been working on researching the Wharton MBA program at the University of Pennsylvania. They have looked up general information about the program through Google search, as well as specific details about the 2-year MBA program and the admissions process from the Wharton School's website. It appears they are considering applying to the program and gathering information to support their application.},
+#                 {uid:179a69ab-5715-457e-8fc0-86533ea165bd, summary:  Based on the summaries, 'Prince' has been working on a project related to Goldman Sachs' Menlo Park location. They have been searching for information about the company's offices, people, and job opportunities in that location. They have visited Google's homepage and used it to search for relevant terms such as "Goldman Sachs Menlo Park" and "how to get in to Goldman Menlo Park." They have also browsed job listings on Indeed.com for positions at Goldman Sachs in Menlo Park, CA. It appears they are considering a career move to Goldman Sachs or are conducting research for another purpose related to the company's Menlo Park location. }"""
+# print(other_k_people(llm, target, neighbors))
