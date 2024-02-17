@@ -7,25 +7,21 @@ class Date(BaseModel):
     date: str
     uid: str
     summary: str
+    one_sentence_summary: str
 
 def today():
     return datetime.now().strftime("%Y-%m-%d")
 
-def create_date(supabase: Client, date: str, uid: str, summary: str):
+def create_date(supabase: Client, date: str, uid: str, summary: str, one_sentence_summary: str):
     response = (
         supabase.table("dates")
-            .insert({"date": date, "uid": uid, "summary": summary})
+            .insert({"date": date, "uid": uid, "summary": summary, "one_sentence_summary": one_sentence_summary})
             .execute()
     )
     return response
 
-def create_today_by_user(supabase: Client, uid: str, summary: str):
-    response = (
-        supabase.table("dates")
-            .insert({"date": today(), "uid": uid, "summary": summary})
-            .execute()
-    )
-    return response
+def create_today_by_user(supabase: Client, uid: str, summary: str, one_sentence_summary: str):
+    return create_date(supabase, today(), uid, summary, one_sentence_summary)
 
 def get_date_by_id(supabase: Client, id: str):
     response = (
@@ -61,10 +57,10 @@ def get_all_today(supabase: Client):
     )
     return [Date(**date) for date in response.data]
     
-def update_date_summary(supabase: Client, id: str, summary: str):
+def update_date_summary(supabase: Client, id: str, summary: str, one_sentence_summary: str):
     response = (
         supabase.table("dates")
-            .update({"summary": summary})
+            .update({"summary": summary, "one_sentence_summary": one_sentence_summary})
             .eq("id", id)
             .execute()
     )

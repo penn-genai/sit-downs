@@ -1,3 +1,4 @@
+from typing import Optional
 from pydantic import BaseModel
 from supabase import Client
 
@@ -5,10 +6,10 @@ from services.date import today
 
 
 class Profile(BaseModel):
-    id: int
+    id: str
     updated_at: str
     name: str
-    avatar_url: str
+    avatar_url: Optional[str]
 
 
 def create_profile(supabase: Client, id, name, avatar_url):
