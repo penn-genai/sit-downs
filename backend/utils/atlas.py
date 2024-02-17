@@ -1,6 +1,7 @@
 from nomic.atlas import AtlasDataset
 import numpy as np
 from pydantic import BaseModel
+from Supabase import init_supabase
 
 dataset = AtlasDataset(
     "sit-downs-pages",
@@ -45,3 +46,20 @@ def generate_map():
 
 def get_projection():
     return dataset.maps[0].embeddings.projected
+
+
+def get_all_supabase():
+    s = init_supabase()
+    response = s.table('pages').select("*").execute()
+    for i, r in enumerate(response.data):
+        add_page(DatasetPage(
+            id = i,
+            title = r['title'],
+            url = r["url"],
+            body = r['body'],
+            summary = r['summary'],
+            date = r['timestamp'],
+            user_name = str(r['id'])
+        ))
+
+generate_map()

@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
-from services.profile import get_profile_by_id
+from backend.utils.atlas import DatasetPage
 from services.date import create_today_by_user, get_today_by_user, update_date_summary
 
 from services.page import create_page, get_pages_by_date_id, get_pages_today_by_user
-from utils.llm import summarize_date, summarize_summary, summarize_webpage
-from utils.atlas import add_page
+from utils.llm import summarize_date, summarize_webpage, summarize_summary
+from utils.atlas import add_page, generate_map
+from services.profile import get_profile_by_id
 
 
 page_router = APIRouter(
@@ -46,6 +47,23 @@ async def process_page_handler(request: Request, uid: str, input: ProcessPageReq
 
     response = update_date_summary_wrapper(request, today.id, profile.name) 
 
-    add_page()
+    user = get_profile_by_id(uid)
+
+    datasetPage = DatasetPage(
+        id = response.id,
+        title = response.title,
+        url = response.url,
+        body = response.body,
+        summary = response.summary,
+        date = response.date,
+        user_name = user.name
+    )
+
+    add_page(datasetPage)
 
     return response
+
+
+@page_router.get("/generate")
+async def generate_nomic(request: Request):
+    return generate_map()
