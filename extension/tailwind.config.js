@@ -16,7 +16,7 @@ module.exports = {
         "text-secondary": "#b7b1c9",
         blur: "#b99ee7",
         transparent: "transparent",
-        "border-color": "#ffffff10"
+        "border-color": "#ffffff20"
       },
       fontFamily: {
         inter: ["Inter"]
@@ -33,14 +33,12 @@ module.exports = {
           color: "#ffffff",
           fontWeight: "500",
           fontSize: "0.875rem",
-          background:
-            "radial-gradient(#ffffff12, #ffffff06), radial-gradient(ellipse at bottom, #b99ee740, transparent)",
-          backdropFilter: "blur(0.25rem)",
+          background: "",
           borderWidth: "1px",
-          borderColor: "#ffffff10",
+          borderColor: "#ffffff20",
           transitionDuration: "300ms",
           "&:hover": {
-            boxShadow: "inset 0 1rem 2rem 0 #ffffff10"
+            boxShadow: "inset 0 1rem 2rem 0 #ffffff05"
           }
         }
       })
