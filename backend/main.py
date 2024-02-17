@@ -1,9 +1,14 @@
 import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from pydantic import BaseModel
 from supabase import create_client, Client
 from datetime import datetime, timezone
+from llm import llm
 
+
+l = llm()
 
 class Page(BaseModel):
     url: str
@@ -12,18 +17,26 @@ class Page(BaseModel):
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 supabase: Client = create_client(
     os.environ.get("SUPABASE_URL"), os.environ.get("SUPABASE_KEY")
 )
 
 
 @app.post("/page/{uid}")
-def process_page(uid, page: Page):
-    today_date = datetime.now(timezone.utc).date()
-    current_timestamp = datetime.now(timezone.utc)
+def process_page(uid: str, page: Page):
+    today_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    current_timestamp = datetime.now(timezone.utc).timestamp()
 
     # Call Mistral to summarize new page
-    page_summary = ""
+    page_summary = l.summarize_webpage(page.title, page.url, page.body)
 
     # Call Mistral to summarize day
     response = (
@@ -33,7 +46,6 @@ def process_page(uid, page: Page):
         .eq("uid", uid)
         .execute()
     )
-    day_summary = ""
 
     # Save day summary to Supabase
     page_json = {
@@ -42,20 +54,32 @@ def process_page(uid, page: Page):
         "title": page.title,
         "summary": page_summary,
     }
+
+    pages = response.data[0]["pages"] if response.data else []
+    pages.append(page_json)
+
+    day_summary = l.summarize_day([page["summary"] for page in pages])
+
     if response.data:
         supabase.table("days").update(
             {
                 "summary": day_summary,
-                "pages": response.data["pages"] + [page_json],
+                "pages": pages,
             }
-        ).eq("id", response.data["id"]).execute()
+        ).eq("id", response.data[0]["id"]).execute()
     else:
+        print({
+                "date": today_date,
+                "uid": uid,
+                "summary": day_summary,
+                "pages": pages,
+            })
         supabase.table("days").insert(
             {
                 "date": today_date,
                 "uid": uid,
                 "summary": day_summary,
-                "pages": [page_json],
+                "pages": pages,
             }
         ).execute()
 
