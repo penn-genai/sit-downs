@@ -40,9 +40,14 @@ function OptionsIndex() {
     loadData()
   }, [user])
 
-  const filteredResults = results.filter((post) =>
-    post.one_sentence_summary.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  const filteredResults = results.filter((post) => {
+    return (
+      post.one_sentence_summary
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      post.summary.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  })
 
   if (!user) {
     return (
@@ -73,19 +78,17 @@ function OptionsIndex() {
     <div className="h-full min-h-screen w-full bg-background text-text-primary">
       <Header />
       <div className="container mx-auto max-w-screen-lg flex flex-col px-6 mt-24 mb-12">
-        <div className="flex justify-center py-4">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="px-4 py-2 w-full max-w-md border rounded-md text-lg"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
         <div className="text-lg text-primary">{formattedDate}</div>
-        <div className="text-4xl mt-2 mb-6">
+        <div className="text-4xl mt-2 mb-4">
           Hey {user.user_metadata.name}, here are today's sit downs!
         </div>
+        <input
+          type="text"
+          placeholder="Search your team's sit downs"
+          className="px-6 py-4 w-full border border-border-color rounded-full bg-background-light text-lg text-text-primary my-4 focus:outline-none"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
         <SummaryCard
           person="You"
           action={

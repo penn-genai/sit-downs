@@ -1,4 +1,5 @@
 from nomic.atlas import AtlasDataset
+from nomic import embed
 import numpy as np
 from pydantic import BaseModel
 from utils.supabase import init_supabase
@@ -44,8 +45,14 @@ def generate_map():
     return map
 
 
-def get_projection():
-    return dataset.maps[0].embeddings.projected
+def get_k_neighbors(summary: str, other_summaries: list[str]):
+    embeddings = embed.text(
+        texts=[summary] + other_summaries,
+        model="nomic-embed-text-v1.5",
+        task_type="search_document",
+    )["embeddings"]
+
+    return np.argsort(np.dot(embeddings[1:], embeddings[0]))[::-1]
 
 
 def get_all_supabase():

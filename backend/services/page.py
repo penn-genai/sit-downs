@@ -70,6 +70,22 @@ def get_top_pages_today_by_user(supabase: Client, uid: str, limit: int):
     else:
         return []
     
+def get_all_top_pages_today(supabase: Client, limit: int):
+    response = (
+        supabase.table("pages")
+            .select("*")
+            .execute()
+    )
+    pages = [Page(**page) for page in response.data]
+    sorted_pages = sorted(pages, key=lambda x: x.times_visited if x.times_visited else 1, reverse=True)[:limit]
+    users = {}
+    for sorted_page in sorted_pages:
+        if sorted_page.date_id not in users:
+            users[sorted_page.date_id] = [sorted_page]
+        elif len(users[sorted_page.date_id]) < limit:
+            users[sorted_page.date_id].append(sorted_page)
+    return users
+    
 def increment_page_times_visited(supabase: Client, uid: str, url: str):
     response = (
         supabase.table("pages")

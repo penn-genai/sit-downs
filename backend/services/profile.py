@@ -32,3 +32,15 @@ def get_profile_by_id(supabase: Client, id: str):
         return Profile(**response.data[0])
     else:
         return None
+
+
+def get_all_profiles(supabase: Client):
+    response = (
+        supabase.table("profiles")
+            .select("*")
+            .execute()
+    )
+    profiles = {}
+    for profile in response.data:
+        profiles[profile["id"]] = Profile(**profile)
+    return profiles
