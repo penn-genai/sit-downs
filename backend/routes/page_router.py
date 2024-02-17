@@ -33,17 +33,17 @@ class ProcessPageRequest(BaseModel):
 
 @page_router.post("/{uid}")
 async def process_page_handler(request: Request, uid: str, input: ProcessPageRequest):
-    result = increment_page_times_visited(request.app.supabase, uid, input.url)
-    if result:
-        return result
-
-    page_summary = summarize_webpage(request.app.llm, input.title, input.url, input.body)
-
     today = get_today_by_user(request.app.supabase, uid)
 
     if not today:
         create_today_by_user(request.app.supabase, uid, "No activity so far.", "No activity so far.")
         today = get_today_by_user(request.app.supabase, uid)
+
+    result = increment_page_times_visited(request.app.supabase, uid, input.url)
+    if result:
+        return result
+
+    page_summary = summarize_webpage(request.app.llm, input.title, input.url, input.body)
 
     page = create_page(request.app.supabase, input.title, input.url, input.body, page_summary, today.id)
 
