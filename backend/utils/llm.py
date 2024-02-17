@@ -70,7 +70,7 @@ def summarize_summary(llm: OpenAI, name: str, summary: str):
         messages=[
             {
                 "role": "system",
-                "content": f"Summarize the following paragraph into one concise sentence with less than 10 words in third-person present-continuous tense with active voice. Example: {name} is working on a project.",
+                "content": f"Summarize the following paragraph into one concise sentence with less than 10 words in third-person present-continuous tense with active voice using the given name f{name} in the original paragraph. Example: {name} is working on a project.",
             },
             {"role": "user", "content": summary},
         ],
