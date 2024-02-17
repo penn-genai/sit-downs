@@ -72,7 +72,7 @@ function OptionsIndex() {
             action={post.one_sentence_summary.split(" ").slice(1).join(" ")}
             date={post.date}
             text={post.summary}
-            links={myResults.links}
+            links={post.links}
           />
         ))}
       </div>

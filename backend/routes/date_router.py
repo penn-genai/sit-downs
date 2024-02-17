@@ -18,7 +18,6 @@ async def get_today_handler(request: Request, uid: str):
     """
 
     result = get_today_by_user(request.app.supabase, uid)
-    print([page.url for page in get_top_pages_today_by_user(request.app.supabase, uid, 5)])
     return {
         "name": get_profile_by_id(request.app.supabase, uid).name,
         "date": result.date,
