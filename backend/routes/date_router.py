@@ -23,7 +23,7 @@ async def get_today_handler(request: Request, uid: str):
     if not result:
         profile = get_profile_by_id(request.app.supabase, uid)
         result = create_today_by_user(request.app.supabase, uid, "No activity so far.", f"{profile.name} has not done anything so far.", "You have not done anything so far. Get to work!")
-
+    
     return {
         "name": get_profile_by_id(request.app.supabase, uid).name,
         "date": result.date,

@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from utils.atlas import generate_map
 
 from routes.router import router
 from utils.llm import init_llm
