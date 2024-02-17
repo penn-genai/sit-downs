@@ -3,8 +3,8 @@ from utils.atlas import get_k_neighbors
 from services.page import get_all_top_pages_today, get_top_pages_today_by_user
 from services.profile import get_all_profiles, get_profile_by_id
 
-from services.date import create_today_by_user, get_all_today, get_today_by_user, get_date_by_id
-from services.page import get_page_by_id
+from services.date import create_today_by_user, get_all_today, get_today_by_user
+from services.page import get_pages_by_date_id
 
 
 date_router = APIRouter(
@@ -60,9 +60,6 @@ async def get_relevant_coworkers_today_handler(request: Request, uid: str):
     } for result in ordered_results]
 
 
-async def get_profile(uid:str):
-    response = get_date_by_id(uid)
-    every_page = get_page_by_id(response.id)
-    print(every_page)
-
-get_profile("fb67383f-12de-4c07-a423-ed7faad8b7a3")
+@date_router.get("/profile/{id}")
+async def get_profile(request: Request, id:str):
+    return get_pages_by_date_id(request.app.supabase, id)
