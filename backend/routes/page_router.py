@@ -5,6 +5,7 @@ from services.date import create_today_by_user, get_today_by_user, update_date_s
 
 from services.page import create_page, get_pages_by_date_id, get_pages_today_by_user
 from utils.llm import summarize_date, summarize_summary, summarize_webpage
+from utils.atlas import add_page
 
 
 page_router = APIRouter(
@@ -44,5 +45,7 @@ async def process_page_handler(request: Request, uid: str, input: ProcessPageReq
     profile = get_profile_by_id(request.app.supabase, uid)
 
     response = update_date_summary_wrapper(request, today.id, profile.name) 
+
+    add_page()
 
     return response
