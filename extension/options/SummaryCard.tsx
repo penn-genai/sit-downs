@@ -6,7 +6,7 @@ export interface SummaryCardProps {
   text: string
   date: string
   action: string
-  links: [string, string, int, string][]
+  links: [string, string, number, string][]
 }
 
 const SummaryCard = ({
