@@ -38,7 +38,8 @@ const SummaryCard = ({
               <a
                 key={index}
                 href={link[1]}
-                className="text-primary hover:text-purple-500">
+                className="text-primary hover:text-purple-500"
+                onClick={(e) => e.stopPropagation()}>
                 {link[0].split(".")[0]}
               </a>
               <div className="text-text-secondary text-xs mb-2">
@@ -59,7 +60,8 @@ const SummaryCard = ({
             <a
               key={index}
               href={link[1]}
-              className="text-primary hover:text-purple-500 mr-4">
+              className="text-primary hover:text-purple-500 mr-4"
+              onClick={(e) => e.stopPropagation()}>
               {link[0].split(".")[0]}
             </a>
           ))}
