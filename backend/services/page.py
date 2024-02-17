@@ -20,7 +20,7 @@ def create_page(supabase: Client, title, url, body, summary, date_id):
             .insert({"title": title, "url": url, "body": body, "summary": summary, "date_id": date_id})
             .execute()
     )
-    return response
+    return Page(**response.data[0])
 
 
 def get_page_by_id(supabase: Client, id: str):

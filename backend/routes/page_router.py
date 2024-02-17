@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
-from backend.utils.atlas import DatasetPage
+from utils.atlas import DatasetPage
 from services.date import create_today_by_user, get_today_by_user, update_date_summary
 
 from services.page import create_page, get_pages_by_date_id, get_pages_today_by_user
@@ -41,27 +41,27 @@ async def process_page_handler(request: Request, uid: str, input: ProcessPageReq
         create_today_by_user(request.app.supabase, uid, "No activity so far.", "No activity so far.")
         today = get_today_by_user(request.app.supabase, uid)
 
-    create_page(request.app.supabase, input.title, input.url, input.body, page_summary, today.id)
+    page = create_page(request.app.supabase, input.title, input.url, input.body, page_summary, today.id)
 
     profile = get_profile_by_id(request.app.supabase, uid)
 
-    response = update_date_summary_wrapper(request, today.id, profile.name) 
+    update_date_summary_wrapper(request, today.id, profile.name) 
 
-    user = get_profile_by_id(uid)
+    user = get_profile_by_id(request.app.supabase, uid)
 
     datasetPage = DatasetPage(
-        id = response.id,
-        title = response.title,
-        url = response.url,
-        body = response.body,
-        summary = response.summary,
-        date = response.date,
+        id = page.id,
+        title = page.title,
+        url = page.url,
+        body = page.body,
+        summary = page.summary,
+        date = today.date,
         user_name = user.name
     )
 
     add_page(datasetPage)
 
-    return response
+    return page
 
 
 @page_router.get("/generate")

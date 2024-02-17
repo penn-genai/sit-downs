@@ -1,7 +1,7 @@
 from nomic.atlas import AtlasDataset
 import numpy as np
 from pydantic import BaseModel
-from Supabase import init_supabase
+from utils.supabase import init_supabase
 
 dataset = AtlasDataset(
     "sit-downs-pages",
@@ -61,5 +61,3 @@ def get_all_supabase():
             date = r['timestamp'],
             user_name = str(r['id'])
         ))
-
-generate_map()

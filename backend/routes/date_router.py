@@ -34,7 +34,7 @@ async def get_relevant_coworkers_today_handler(request: Request, uid: str):
     # for now, we just return the first 3 coworkers
 
     results = get_all_today(request.app.supabase)[:3]
-    filter(lambda result: result.uid != uid, results)
+    results = filter(lambda result: result.uid != uid, results)
     return [{
         "name": get_profile_by_id(request.app.supabase, result.uid).name,
         "date": result.date,

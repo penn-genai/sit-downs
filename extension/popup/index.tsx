@@ -8,6 +8,15 @@ import "../style.css"
 import { supabase } from "~core/supabase"
 import { sendToBackground } from "@plasmohq/messaging"
 
+function toTitleCase(str) {
+  return str.replace(
+    /\w\S*/g,
+    function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    }
+  );
+}
+
 const IndexPopup = () => {
   const [user, setUser] = useStorage<User>({
     key: "user",
@@ -63,7 +72,7 @@ const IndexPopup = () => {
         password,
         options: {
           data: {
-            name
+            name: toTitleCase(name)
           }
         }
       })
