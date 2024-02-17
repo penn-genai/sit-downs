@@ -30,7 +30,7 @@ async def get_today_handler(request: Request, uid: str):
         "summary": result.summary,
         "one_sentence_summary": result.one_sentence_summary,
         "one_sentence_summary_second_person": result.one_sentence_summary_second_person,
-        "links": [[page.title, page.url] for page in get_top_pages_today_by_user(request.app.supabase, uid, 5)],
+        "links": [[page.title, page.url, page.times_visited, page.summary] for page in get_top_pages_today_by_user(request.app.supabase, uid, 5)],
     }
 
 
