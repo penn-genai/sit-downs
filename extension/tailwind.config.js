@@ -34,7 +34,7 @@ module.exports = {
           fontWeight: "500",
           fontSize: "0.875rem",
           background: "#222222",
-          borderWidth: "2px",
+          borderWidth: "1px",
           borderColor: "#ffffff20",
           transitionDuration: "300ms",
           "&:hover": {
