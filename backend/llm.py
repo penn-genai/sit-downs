@@ -1,26 +1,36 @@
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
+from transformers import AutoTokenizer
 
 load_dotenv()
-# Replace the empty string with your model id below
-model_id = os.environ["BASE_TEN_MODEL_ID"]
 
-client = OpenAI(
-   api_key=os.environ["BASE_TEN_API_KEY"],
-   base_url=f"https://bridge.baseten.co/{model_id}/v1"
-)
+class llm:
+    def __init__(self):
+        model_id = os.environ["BASE_TEN_MODEL_ID"]
+        self.client = OpenAI(
+            api_key=os.environ["BASE_TEN_API_KEY"],
+            base_url=f"https://bridge.baseten.co/{model_id}/v1"
+        )
 
-# Call model endpoint
-res = client.chat.completions.create(
- model="mistral-7b",
- messages=[
-   {"role": "user", "content": "What is a mistral?"},
-   {"role": "assistant", "content": "A mistral is a type of cold, dry wind that blows across the southern slopes of the Alps from the Valais region of Switzerland into the Ligurian Sea near Genoa. It is known for its strong and steady gusts, sometimes reaching up to 60 miles per hour."},
-   {"role": "user", "content": "How does the mistral wind form?"}
- ],
- temperature=0.9,
- max_tokens=512,
-)
+    def cut(self, webSequence):
+        tokenizer = AutoTokenizer.from_pretrained("mistralai/Mixtral-8x7B-v0.1")
+        tokenized = tokenizer(webSequence, return_tensors="pt")
+        if (len(tokenized) < 4096):
+            return webSequence
+        return tokenized[:4096]
 
-print(res.choices[0].message.content)
+    def summarize_webpage(self, webSequence):
+        res = self.client.chat.completions.create(
+        model="mistral-7b",
+        messages=[
+            {"role": "system", "content": "Summarize what the following web page created by this DOM does in a short, concise paragraph of LESS THAN 100 WORDS:"},
+            {"role": "user", "content": webSequence}
+            ],
+            temperature=0.6,
+            max_tokens=512,
+        )
+        arr = res.choices[0].message.content.split("[/INST]")
+        if (len(arr) < 1):
+            raise ValueError("No output")
+        return arr[1]
