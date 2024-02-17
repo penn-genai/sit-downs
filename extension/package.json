@@ -10,6 +10,7 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@plasmohq/messaging": "^0.6.2",
     "axios": "^1.6.7",
     "feather-icons-react": "^0.7.0",
     "plasmo": "0.84.2",
